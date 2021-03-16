@@ -1,10 +1,16 @@
 const express = require('express')
 const mongoose = require('mongoose')
+const bodyParser = require('body-parser')
+const path = require('path')
+const user = require('./routes/user')
 const url = 'mongodb://localhost/GuiEcu'
 
 const app =  express()
 
-mongoose.connect(url, {useNewUrlParser: true})
+app.use(bodyParser.urlencoded({ extended: false })),
+app.use(bodyParser.json()),
+
+mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true})
 const con =  mongoose.connection
 
 con.on('open', function(){
@@ -12,10 +18,10 @@ con.on('open', function(){
 
 })
 
+app.use('/api', user)
 app.use(express.json())
 
-const userRouter = require('./routes/user')
-app.use('/user', userRouter)
+
 
 app.listen(9000, ()=>{
     console.log('Server started....')

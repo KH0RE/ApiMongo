@@ -1,9 +1,16 @@
 const express = require('express')
+const { crearOne, eliminar, verTodos, editar } = require('../controllers/usersControllers')
 const router = express.Router()
+const storage = require('../middlaware/multer')
 const User =  require('../models/user')
 
+
+router.post('/user',  storage.single('file'), crearOne  );
+router.delete('/user/:id', eliminar );
+router.get('/user', verTodos);
+router.put('/user/:id', editar)
 //get de todo
-router.get('/',  async (req, res)=>{
+/*router.get('/',  async (req, res)=>{
     try{
             const user = await User.find()
             res.json(user)
@@ -67,5 +74,5 @@ router.delete('/:id', async(req,res)=>{
         res.send('No de pudo borrar...')
     }
 })
-
+*/
 module.exports = router
